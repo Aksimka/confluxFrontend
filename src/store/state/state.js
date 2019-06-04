@@ -68,5 +68,14 @@ export default {
         //     }
         //
         // }
+    ],
+    friendList: [
+        {
+            name: '',
+            mail: '',
+            id: null,
+            img: '',
+            lastVisit: ''
+        }
     ]
 }

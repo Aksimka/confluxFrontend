@@ -10,6 +10,7 @@ import actions from './actions/actions'
 import user from './modules/user'
 import reqRes from './modules/reqRes'
 import firebase from './modules/firebase'
+import friends from './modules/friends/index.js'
 
 Vue.use(Vuex);
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     getters,
     mutations,
     actions,
+    friends,
     modules: {
         user,
         reqRes,

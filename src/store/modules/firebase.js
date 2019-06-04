@@ -7,12 +7,15 @@ export default {
         opponent: []
     },
     actions: {
+        //collection, target, filters/field/cond/eq, limit
         getData({commit, state}, val){
             return new Promise(function(resolve, reject){
                 let collection = val.collection;
                 let target = val.target;
                 let ref = firebase.firestore().collection(`${collection}`);
-                let query = ref.where(`${val.filters.field}`, `${val.filters.cond}`, val.filters.eq);
+                val.limit && ref.limit(val.limit);
+                let query = ref;
+                val.filters && query.where(`${val.filters.field}`, `${val.filters.cond}`, val.filters.eq);
                 console.log(query,'query');
                 query.get().then(res=>{
 

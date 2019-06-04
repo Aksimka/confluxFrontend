@@ -30,13 +30,12 @@ new Vue({
         firebase.initializeApp(config);
 
         var db = firebase.firestore();
-        db.settings({timestampsInSnapshots: true});
-        db.collection('usersData').get().then(res=>{
-            res.forEach((doc) => {
-                console.log('resresresresresresresresres');
-                console.log(doc.id ,doc.data());
-            });
-        })
+        // db.collection('usersData').get().then(res=>{
+        //     res.forEach((doc) => {
+        //         console.log('resresresresresresresresres');
+        //         console.log(doc.id ,doc.data());
+        //     });
+        // })
 
 
         firebase.auth().onAuthStateChanged(user=> {
