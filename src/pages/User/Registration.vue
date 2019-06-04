@@ -8,8 +8,10 @@ form.registration(@submit.prevent="validateBeforeSubmit")
         InputOne(name="password" placeholder="Password" pattern="alpha_num|min:5|max:20|required" type="text" @write="pushValue($event, 'password')")
     .input-wrapper(:class="{'warning': conformError}")
         CheckboxOne(name="agree" text="I agree to terms and conditions" @changeCheckBox="pushValue($event, 'conform')")
+
     .input-wrapper
         ButtonDefault(type="submit" text="REGISTER" :primary="true")
+        .message {{errMess}}
 </template>
 
 <script>
@@ -26,41 +28,28 @@ form.registration(@submit.prevent="validateBeforeSubmit")
                 email: '',
                 password: '',
                 conform: false,
-                conformError: false
+                conformError: false,
+                errMess: null
             }
         },
         methods: {
             validateBeforeSubmit () {
                 this.$validator.validateAll().then((result) => {
-
-                    this.errors.clear()
-                    if(this.login === '' || this.email === '' || this.password === '') {
-                        this.errors.add({
-                            field: 'SomeField',
-                            msg: 'All fields are required.'
-                        })
-                        console.log(this.errors)
-                    }
-                    if(this.conform === false) {
-                        this.conformError = true
-                        this.errors.add({
-                            field: 'Checkbox',
-                            msg: 'You need to agree with our terms.'
-                        })
-                    }
-                    else if (result) {
-                        if(this.conform === false) {
-                            this.conformError = true
-                        }
-                        axios({
-                            method: 'post',
-                            url: 'https://localhost:3000/user/registration',
-                            data: {
-                                login: this.login,
-                                mail: this.email,
-                                password: this.password
-                            }
-                        })
+                    if (result) {
+                        const user = {
+                            email: this.email,
+                            password: this.password,
+                            name: this.login
+                        };
+                        this.$store.dispatch('registerUser', user)
+                            .then(()=>{
+                                console.log('registrated');
+                                this.errMess = null;
+                            })
+                            .catch(()=> {
+                                this.errMess = 'User already exists.';
+                                console.log(this.errors)
+                            });
                     }
                     if(this.conform === true) {
                         this.conformError = false
@@ -106,6 +95,8 @@ form.registration(@submit.prevent="validateBeforeSubmit")
     display: flex
     justify-content: center
     align-items: center
+.message
+    color: #ff8079
 
 .warning
     animation: warning .5s

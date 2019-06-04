@@ -17,7 +17,7 @@ export default {
     mounted: function(){
         let menuItems = document.querySelectorAll('.user-template-top-choose__item');
         let menuLine = document.querySelector('.user-template-top-choose__underline');
-        let itemWidths = []
+        let itemWidths = [];
         for (let i = 0; i < menuItems.length; i++){
             itemWidths[i] = menuItems[i].clientWidth
         }
@@ -37,6 +37,7 @@ export default {
             ]
         }
     },
+
     methods: {
         choose: function(id){
             let menuItems = document.querySelectorAll('.user-template-top-choose__item');
@@ -60,7 +61,7 @@ export default {
 .user
     height: 100vh
     /*background: linear-gradient(to right bottom, #7d4577, #400d37)*/
-    background: linear-gradient(to right bottom, #a3ffa7, #ebff8b)
+    background: linear-gradient(to right bottom, #FFA000, #ebff8b)
     display: flex
     align-items: center
     justify-content: center

@@ -1,12 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '@/store/store'
 //PAGES
 import Main from './../pages/Main'
 import Toolbar from './../pages/Main/Toolbar'
 import Default from './../pages/Main/Default'
+
 import LeftNavigation from './../pages/Main/Left-navigation'
-import chatList from './../pages/Main/Default/ChatList'
-import chat from './../pages/Main/Default/Chat'
+import dialog from './../pages/Main/Default/Dialog'
+import chat from './../pages/Main/Default/Dialog/Chat'
+import profile from './../pages/Main/Default/Profile'
+import friends from './../pages/Main/Default/Friends'
+import logout from './../pages/Main/Default/LogOut';
 
 
 
@@ -23,6 +28,10 @@ export default new Router({
         {
             path: '/user',
             component: Main,
+            // beforeCreate(to, from, next) {
+            //     console.log(store.getters.checkUser, 'checking user');
+            //     store.getters.checkUser ? next(): next('/auth');
+            // },
             children: [
                 {
                     path: ':id',
@@ -30,7 +39,31 @@ export default new Router({
                         LeftNavigation,
                         Toolbar,
                         Default
-                    }
+                    },
+                    children: [
+                        {
+                            path: 'dialog',
+                            component: dialog,
+                            children: [
+                                {
+                                    path: ':dialog',
+                                    component: chat,
+                                }
+                            ]
+                        },
+                        {
+                            path: 'profile',
+                            component: profile
+                        },
+                        {
+                            path: 'friends',
+                            component: friends
+                        }
+                    ]
+                },
+                {
+                    path: 'out',
+                    component: logout
                 }
             ]
         },
@@ -49,7 +82,7 @@ export default new Router({
                 {
                     path: 'registration',
                     component: Registration
-                }
+                },
             ]
         },
         {

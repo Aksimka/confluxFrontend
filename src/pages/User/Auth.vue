@@ -1,14 +1,15 @@
 <template lang="pug">
-.auth
+.auth(@submit.prevent="validateBeforeSubmit")
     form.auth-form
         .input-wrapper
-            InputOne(name="login" placeholder="Login" pattern="email" type="text" @write="pushValue($event, 'login')")
+            InputOne(name="login" placeholder="Login" pattern="email" type="text" @write="pushValue($event, 'email')")
         .input-wrapper
             InputOne(name="password" placeholder="Password" pattern="alpha_num|min:5|max:20" type="text" @write="pushValue($event, 'password')")
         .input-wrapper
             CheckboxOne(name="keep" text="Keep me logged in")
         .input-wrapper
-            ButtonDefault(type="input" text="LOGIN" :primary="true")
+            ButtonDefault(type="input" :text="btnText" :primary="!isWrong" :danger="isWrong")
+    .auth__error-message {{errMess}}
     .auth-forgot-password
         a.auth-forgot-password__btn(href="#") Forgot password?
 
@@ -24,14 +25,47 @@ export default {
     components: {ButtonDefault, CheckboxOne, InputOne},
     data: function(){
         return {
-            login: '',
-            password: ''
+            email: '',
+            password: '',
+            errMess: null,
+            loginError: '',
+            isWrong: false,
+            btnText: 'LogIn',
+            conformError: null
         }
     },
     methods: {
+        validateBeforeSubmit () {
+            this.$validator.validateAll().then((result) => {
+                if (result) {
+                    const user = {
+                        email: this.email,
+                        password: this.password,
+                        name: this.name
+                    };
+                    this.btnText = 'Loading...';
+                    this.$store.dispatch('loginUser', user)
+                        .then(()=>{
+                            console.log('logged in');
+                            this.errMess = null;
+                            console.log(this.$store.getters.getUser);
+                            this.$router.push(`/user/${this.$store.getters.getUser.id}`)
+                        })
+                        .catch(()=> {
+                            this.isWrong = true;
+                            this.btnText = 'Try again';
+                            console.log(this.errors)
+                        });
+                }
+                if(this.conform === true) {
+                    this.conformError = false
+                }
+                console.log(this.email, this.password, this.conform)
+            });
+        },
         pushValue($event, name){
-            if(name === 'login'){
-                this.login = $event
+            if(name === 'email'){
+                this.email = $event
             }
             if(name === 'password'){
                 this.password = $event
@@ -40,14 +74,20 @@ export default {
     },
     computed: {
 
+    },
+    mounted(){
+
     }
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 .auth
     color: #ffffff
     margin-top: 90px
+.wrong
+    background: #ff6e3e
+    color: #ffffff
 
 .input-wrapper
     margin-top: 50px

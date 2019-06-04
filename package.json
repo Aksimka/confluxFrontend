@@ -7,9 +7,14 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@mdi/font": "^3.5.95",
     "axios": "^0.18.0",
+    "css-loader": "^2.1.1",
+    "firebase": "6.0.2",
+    "material-design-icons-iconfont": "^4.0.5",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
+    "v-emoji-picker": "^1.1.1",
     "vee-validate": "^2.1.7",
     "vue": "^2.5.22",
     "vue-router": "^3.0.1",

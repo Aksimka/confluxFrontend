@@ -55,6 +55,8 @@ export default {
     color: #ffffff
     font-weight: bolder
     font-size: 18px
+    &:focus
+        outline: none
 .primary
     background: #2d4ef5
 .success

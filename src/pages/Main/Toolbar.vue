@@ -3,7 +3,7 @@
     <v-toolbar-side-icon @click="changeDrawerState"></v-toolbar-side-icon>
     <v-toolbar-title class="white--text">Conflux</v-toolbar-title>
     <v-spacer></v-spacer>
-    <div class="greeting pr-4 hidden-xs-only" >Hi, {{userName}}!</div>
+    <div class="greeting pr-4 hidden-xs-only" >Hi, {{myInfo.name}}!</div>
     <v-badge overlap bottom class="cup">
         <span slot="badge">3</span>
         <v-avatar color="teal">
@@ -19,13 +19,10 @@
 </template>
 
 <script>
+import shortCuts from '@/mixins/dataShortCut'
 export default {
     name: "Toolbar",
-    data: function(){
-        return {
-            userName: 'Aksimka'
-        }
-    },
+    mixins: [shortCuts],
     methods: {
         changeDrawerState(){
             this.$store.commit('drawNavigation', !this.$store.state.drawer)

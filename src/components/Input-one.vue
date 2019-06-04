@@ -54,7 +54,7 @@ input
     &:focus
         outline: none
 input:-webkit-autofill
-    box-shadow: inset 0 0 0 1000px #E9FFDC
+    box-shadow: inset 0 0 0 1000px #FBF0C0
 
 .input-block__placeholder
     position: absolute

@@ -92,7 +92,7 @@ export default {
                 opacity: 1
                 border-radius: 50%
         &:last-child
-            padding-left: 8px
+            padding-left: 15px
     &:hover span:first-child
         border-color: #506EEC
 
