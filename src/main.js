@@ -29,7 +29,7 @@ new Vue({
         };
         firebase.initializeApp(config);
 
-        var db = firebase.firestore();
+        //var db = firebase.firestore();
         // db.collection('usersData').get().then(res=>{
         //     res.forEach((doc) => {
         //         console.log('resresresresresresresresres');
@@ -44,6 +44,7 @@ new Vue({
             userData.get().then(data=> {
                 data.forEach(i=>{
                     this.$store.commit('setMyInfo', i.data(), {root: true});
+                    Vue.set(this.$store.state.myInfo, 'reference', i.id);
                 });
                 this.$store.commit('userLoaded');
             });

@@ -1,6 +1,6 @@
 <template>
 <v-navigation-drawer app v-model="$store.state.drawer">
-    <v-img :aspect-ratio="16/9" src="/images/me.jpg" gradient="to top right, rgba(0,0,0,0.5), rgba(0,0,0,0.5)">
+    <v-img :aspect-ratio="16/9" :src="avatar" gradient="to top right, rgba(0,0,0,0.5), rgba(0,0,0,0.5)">
         <v-layout pa-2 column fill-height class="white--text">
             <v-spacer></v-spacer>
             <v-flex shrink>
@@ -49,6 +49,12 @@ export default {
         },
         user(){
             return this.$store.getters.getUser
+        },
+        avatar(){
+            if(this.myInfo.avatar.length === 0){
+                return '/images/default-avatar.png'
+            }
+            else return this.myInfo.avatar
         }
     },
     methods: {

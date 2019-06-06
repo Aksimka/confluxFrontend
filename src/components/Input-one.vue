@@ -1,6 +1,6 @@
 <template lang="pug">
 .input-block
-    input(:name="name" @input="write()" @focus="isFocused = true" @blur="isFocused = false" v-model="value" v-validate="pattern" type="inputType")
+    input(:name="name" @input="write()" @focus="isFocused = true" @blur="isFocused = false" v-model="value" v-validate="pattern" :type="inputType")
     .input-block__placeholder(:class="{ input_focused: isFocused || value.length > 0 }") {{ placeholder }}
     .input-block__line(:class="{'input-block__line_focused': isFocused && value.length === 0, 'input-block__line_danger': errors.has(name) || $parent.errors.has('SomeField'), 'input-block__line_success': !errors.has(name)  && value.length !== 0}")
 </template>

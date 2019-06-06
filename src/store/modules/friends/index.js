@@ -1,9 +1,10 @@
 export default {
     state: {
-        peopleList: []
+        peopleList: [],
+        friendsList: []
     },
     actions: {
-        peopleList({getters, commit, dispatch}, {collection, limit}){
+        peopleList({commit, dispatch}, {collection, limit}){
             dispatch('getData', {collection, limit})
                 .then(res=>{
                     let toPush = [];
@@ -12,6 +13,16 @@ export default {
                     });
                     commit('setPeopleList', toPush);
                 })
+        },
+        friendsListPush({commit, dispatch}, {collection, filters}){
+            console.log(filters, 'filters');
+            dispatch('getData', {collection, filters})
+                .then(res=>{
+                    commit('pushToFriends', res.body[0]);
+                })
+        },
+        addToFriends({commit, dispatch}, {collection, val, ref, field}){
+            dispatch('updateArray', {collection, val, ref, field})
         }
     },
     mutations: {
@@ -22,11 +33,22 @@ export default {
         clearPeopleList(state){
             state.peopleList = [];
             console.log('peopleList cleared');
+        },
+        pushToFriends(state, val){
+            state.friendsList.push(val);
+            console.log(state.friendsList, 'pushed to friendsList');
+        },
+        clearFriendsList(state){
+            state.friendsList = [];
+            console.log('friendsList cleared');
         }
     },
     getters: {
         getPeopleList(state){
             return state.peopleList;
+        },
+        getFriendsList(state){
+            return state.friendsList;
         }
     }
 }

@@ -8,7 +8,7 @@
         <span slot="badge">3</span>
         <v-avatar color="teal">
             <img
-                    src="./../../assets/me.jpg"
+                    :src="avatar"
                     alt="My photo"
             >
         </v-avatar>
@@ -26,6 +26,14 @@ export default {
     methods: {
         changeDrawerState(){
             this.$store.commit('drawNavigation', !this.$store.state.drawer)
+        }
+    },
+    computed: {
+        avatar(){
+            if(this.myInfo.avatar.length === 0){
+                return '/images/default-avatar.png'
+            }
+            else return this.myInfo.avatar
         }
     }
 

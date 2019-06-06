@@ -1,6 +1,8 @@
 import firebase from 'firebase/app'
 import User from './helpers/User'
 import UserData from './helpers/UserData'
+import Vue from 'vue'
+import store from './../store.js'
 
 export default {
     state: {
@@ -54,6 +56,7 @@ export default {
                 userData.get().then(data=> {
                     data.forEach(i=>{
                         commit('setMyInfo', i.data(), {root: true});
+                        Vue.set(rootState.myInfo, 'reference', i.id);
                         console.log(rootState.myInfo, 'rootState.myInfo');
                     })
                 });
@@ -72,6 +75,7 @@ export default {
         },
         logoutUser({commit}){
             firebase.auth().signOut();
+            commit('clearFriendsList');
             commit('setUser', null)
         }
     },

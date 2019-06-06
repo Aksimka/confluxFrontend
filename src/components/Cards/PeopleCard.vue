@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-img
-                :src="avatar"
+                :src="ava"
                 height="200px"
                 gradient="to top right, rgba(0,0,0,0.5), rgba(0,0,0,0.5)"
         >
@@ -16,14 +16,7 @@
         </v-img>
 
         <v-card-actions pa-0>
-            <v-btn
-                    block
-                    color="blue-grey"
-                    class="white--text"
-            >
-                Create Chat
-                <v-icon right dark>question_answer</v-icon>
-            </v-btn>
+            <slot name="btn"></slot>
         </v-card-actions>
     </v-card>
 </template>
@@ -36,6 +29,14 @@
 
             }
         },
+        computed: {
+            ava(){
+                if(this.avatar === ''){
+                    return '/images/default-avatar.png'
+                }
+                else return this.avatar;
+            }
+        },
         props: {
             avatar: {
                 type: String,
@@ -46,6 +47,9 @@
                 required: true
             },
             mail: {
+                type: String
+            },
+            lastVisit: {
                 type: String
             }
         }

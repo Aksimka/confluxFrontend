@@ -4,7 +4,7 @@
         .input-wrapper
             InputOne(name="login" placeholder="Login" pattern="email" type="text" @write="pushValue($event, 'email')")
         .input-wrapper
-            InputOne(name="password" placeholder="Password" pattern="alpha_num|min:5|max:20" type="text" @write="pushValue($event, 'password')")
+            InputOne(name="password" placeholder="Password" pattern="alpha_num|min:5|max:20" inputType="password" @write="pushValue($event, 'password')")
         .input-wrapper
             CheckboxOne(name="keep" text="Keep me logged in")
         .input-wrapper

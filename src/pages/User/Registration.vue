@@ -5,7 +5,7 @@ form.registration(@submit.prevent="validateBeforeSubmit")
     .input-wrapper
         InputOne(name="email" placeholder="Email" pattern="email|required" type="text" @write="pushValue($event, 'email')")
     .input-wrapper
-        InputOne(name="password" placeholder="Password" pattern="alpha_num|min:5|max:20|required" type="text" @write="pushValue($event, 'password')")
+        InputOne(name="password" placeholder="Password" pattern="alpha_num|min:5|max:20|required" inputType="password" @write="pushValue($event, 'password')")
     .input-wrapper(:class="{'warning': conformError}")
         CheckboxOne(name="agree" text="I agree to terms and conditions" @changeCheckBox="pushValue($event, 'conform')")
 

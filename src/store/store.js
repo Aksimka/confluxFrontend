@@ -19,10 +19,11 @@ export default new Vuex.Store({
     getters,
     mutations,
     actions,
-    friends,
+
     modules: {
         user,
         reqRes,
+        friends,
         firebase
     }
 })

@@ -13,12 +13,11 @@ export default {
                 let collection = val.collection;
                 let target = val.target;
                 let ref = firebase.firestore().collection(`${collection}`);
-                val.limit && ref.limit(val.limit);
                 let query = ref;
-                val.filters && query.where(`${val.filters.field}`, `${val.filters.cond}`, val.filters.eq);
+                if(val.limit) query = ref.limit(val.limit);
+                if(val.filters) query = query.where(`${val.filters.field}`, `${val.filters.cond}`, val.filters.eq);
                 console.log(query,'query');
                 query.get().then(res=>{
-
                     let data = {
                         collection: null,
                         body: []
@@ -63,13 +62,15 @@ export default {
                 let collection = val.collection;
                 let value = val.val;
                 let reference = val.ref;
+                let field = val.field;
+                console.log(val, 'valvalvalvalvlavla');
 
                 let ref = firebase.firestore().collection(`${collection}`).doc(reference);
+                let toUpdate = {timestamp: firebase.firestore.FieldValue.serverTimestamp()};
+                toUpdate[field] = firebase.firestore.FieldValue.arrayUnion(value);
+                console.log(toUpdate, 'toUpdatetoUpdatetoUpdatetoUpdate');
 
-                ref.update({
-                    history: firebase.firestore.FieldValue.arrayUnion(value.val),
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                })
+                ref.update(toUpdate)
             })
         }
     },

@@ -147,7 +147,8 @@
                     this.$store.dispatch('createChatMessage', {
                         collection: 'chatHistory',
                         val: {date: new Date().toISOString(), message: this.message, ownerId: this.myInfo.id},
-                        ref: this.currentChatInfo.reference
+                        ref: this.currentChatInfo.reference,
+                        field: 'history'
                     });
                     this.clearMessage();
                     console.log(this.currentChatInfo, 'this.currentChatInfo');
@@ -207,7 +208,6 @@
                     console.log(el, preLastEl, 'el, preLastEl');
                     this.history = el;
                     console.log(this.currentChatInfo.chatStory.history, 'this.currentChatInfo.chatStory.history');
-                    this.added = true;
                     setTimeout(function(){
                         let a = document.querySelector('.chat-content-messages');
                         a.scrollTo({
