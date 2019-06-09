@@ -7,7 +7,7 @@
         >
         </v-text-field>
         <v-layout wrap>
-            <v-flex md3 v-for="i in friendsList">
+            <v-flex md3 v-for="(i, index) in friendsList" :key="index">
 
                 <friend-card :name="i.name" :mail="i.mail" :avatar="i.avatar" :lastVisit="i.lastVisit">
                     <template slot="btn">
@@ -15,6 +15,7 @@
                                 block
                                 color="red"
                                 class="white--text"
+                                @click="deleteFromFriends(i.id)"
                         >
                             Удалить из друзей
                             <v-icon right dark>person_add_disabled</v-icon>
@@ -40,12 +41,31 @@
                 friendSearch: ''
             }
         },
+        methods: {
+            deleteFromFriends(id){
+                let index = this.friendsList.findIndex(i=> i.id === id);
+                this.$store.commit('deleteFromList', {index, list: 'friendsList'});
+                let toDelIndex = this.myInfo.friends.findIndex(i=> i === id);
+                this.myInfo.friends.splice(toDelIndex, 1);
+
+                this.$store.dispatch('deleteFromFriends', {value: {friends: this.myInfo.friends}, ref: this.myInfo.reference})
+                    .then(()=>{
+                        this.$store.commit('clearPeopleList');
+                        this.$store.dispatch('getPeopleList', {collection: 'usersData', limit: 20})
+                    })
+            }
+        },
         created(){
-            if(this.friendsList.length === 0){
-                this.myInfo.friends.forEach(i=>{
-                    this.$store.dispatch('friendsListPush', {collection: 'usersData', filters: {field: 'id', cond: '==', eq: i}});
-                    console.log(this.myInfo.friends, 'is my friend');
-                });
+
+        },
+        watch: {
+            userLoaded(){
+                if(this.friendsList.length === 0){
+                    this.myInfo.friends.forEach(i=>{
+                        this.$store.dispatch('friendsListPush', {collection: 'usersData', filters: {field: 'id', cond: '==', eq: i}});
+                        console.log(this.myInfo.friends, 'is my friend');
+                    });
+                }
             }
         },
         computed: {

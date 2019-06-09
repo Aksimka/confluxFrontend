@@ -70,7 +70,20 @@ export default {
                 toUpdate[field] = firebase.firestore.FieldValue.arrayUnion(value);
                 console.log(toUpdate, 'toUpdatetoUpdatetoUpdatetoUpdate');
 
-                ref.update(toUpdate)
+                ref.update(toUpdate);
+                resolve(ref);
+            })
+        },
+        changeFieldInDoc({commit, state}, val){
+            return new Promise(function(resolve, reject){
+                let collection = val.collection;
+                let value = val.val;
+                let reference = val.ref;
+                console.log(val, 'valvalvalvalvlavla');
+                let ref = firebase.firestore().collection(`${collection}`).doc(reference);
+
+                ref.update(value);
+                resolve(ref);
             })
         }
     },
