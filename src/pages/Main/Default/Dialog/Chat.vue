@@ -198,8 +198,33 @@
                         this.currentChatInfo.membersInfo.push(this.$store.state.firebase.opponent);
                     });
                 });
+
+            this.db.onSnapshot(doc => {
+                let source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+                let data = doc.data();
+                let el = data.history[data.history.length - 1];
+                let preLastEl = this.currentChatInfo.chatStory.history[data.history.length - 1];
+                console.log(el, 'is it ot me?');
+                console.log(source, 'source');
+
+                if(source === "Server"){
+                    console.log(el, preLastEl, 'el, preLastEl');
+                    this.history = el;
+                    console.log(this.currentChatInfo.chatStory.history, 'this.currentChatInfo.chatStory.history');
+                    setTimeout(function(){
+                        let a = document.querySelector('.chat-content-messages');
+                        a.scrollTo({
+                            top: a.scrollHeight,
+                            behavior: "smooth"
+                        })
+                    }, 50)
+                }
+            });
+            this.currentChatInfo.chatStory.history.pop();
+
             this.currentChatInfo.chatStory.history.pop();
             setTimeout(function(){
+
                 let a = document.querySelector('.chat-content-messages');
                 a.scrollTo({
                     top: a.scrollHeight,
