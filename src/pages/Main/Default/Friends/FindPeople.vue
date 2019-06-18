@@ -67,7 +67,13 @@
             }
         },
         created(){
-            this.$store.dispatch('getPeopleList', {collection: 'usersData', limit: 20})
+            this.$store.dispatch('getPeopleList', {collection: 'usersData', limit: 20});
+            if(this.friendsList.length === 0){
+                this.myInfo.friends.forEach(i=>{
+                    this.$store.dispatch('friendsListPush', {collection: 'usersData', filters: {field: 'id', cond: '==', eq: i}});
+                    console.log(this.myInfo.friends, 'is my friend');
+                });
+            }
         },
         mounted(){
             //console.log(this.filteredPeoples, 'this.filteredPeoples');
@@ -75,6 +81,9 @@
         computed: {
             peopleList(){
                 return this.$store.getters.getPeopleList;
+            },
+            friendsList(){
+                return this.$store.getters.getFriendsList;
             },
             myRef(){
                 return this.myInfo.reference;

@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export default {
     initial(state, val){
 
@@ -15,7 +17,31 @@ export default {
     },
     setCurrentChat(state, val){
         console.log('Current chat is gotten');
-        state.currentChat = val;
+        Vue.set(state, 'currentChat', val);
+    },
+    clearCurrentChat(state){
+        let clearedChat = {
+          chatStory: {
+              history: [],
+              id: null
+          },
+            class: '',
+            historyId: null,
+            id: null,
+            lastMessage: {
+              image: '',
+                message: '',
+                name: '',
+                ownerId: null,
+                unread: false
+            },
+            members: [],
+            name: '',
+            ownerId: null,
+            reference: ''
+        };
+        Vue.set(state, 'currentChat', clearedChat);
+        console.log('currentChat clear');
     },
     setMessageStory(state, val){
         console.log('Message story is gotten');

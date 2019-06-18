@@ -28,11 +28,11 @@ export default {
             chooseItems: [
                 {
                     id: 0,
-                    text: 'sign in'
+                    text: 'вход'
                 },
                 {
                     id: 1,
-                    text: 'sign up'
+                    text: 'регистрация'
                 }
             ]
         }

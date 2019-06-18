@@ -38,13 +38,13 @@ export default {
     computed: {
         menuItems(){
             return [
-                { icon: 'person', title: 'Profile', path: `/user/${this.user.id}/profile`},
-                { icon: 'accessibility', title: 'My Friends', path: `/user/${this.user.id}/friends` },
-                { icon: 'send', title: 'Dialogs', path: `/user/${this.user.id}/dialog` },
-                { icon: 'question_answer', title: 'Create Dialog', path: `/user/${this.user.id}/newdialog` },
+                { icon: 'person', title: 'Профиль', path: `/user/${this.user.id}/profile`},
+                { icon: 'accessibility', title: 'Мои друзья', path: `/user/${this.user.id}/friends` },
+                { icon: 'send', title: 'Дилоги', path: `/user/${this.user.id}/dialog` },
+                { icon: 'question_answer', title: 'Создать диалог', path: `/user/${this.user.id}/createDialog` },
                 { divider: true },
-                { icon: 'help_outline', title: 'About us', path: `/user/${this.user.id}/about` },
-                { icon: 'remove_circle', title: 'Log out', func: this.logOut},
+                { icon: 'help_outline', title: 'О нас', path: `/user/${this.user.id}/about` },
+                { icon: 'remove_circle', title: 'Выйти', func: this.logOut},
             ]
         },
         user(){

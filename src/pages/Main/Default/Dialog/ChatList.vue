@@ -1,6 +1,6 @@
 <template>
     <v-list three-line class="dialog-list">
-        <v-subheader>Recent chat</v-subheader>
+        <v-subheader>Последние переписки</v-subheader>
         <v-list-tile
                 v-for="item in dialogList"
                 :key="item.id"
@@ -53,13 +53,16 @@ export default {
             }
         },
         goToChat(to){
+            this.$router.push(`/user/${this.$store.getters.getUser.id}/dialog`);
             console.log(`go to ${to}`);
+            this.$store.commit('clearCurrentChat');
+            Vue.set(this.$store.state.firebase, 'opponent', {});
             let toChat = this.dialogList.find(i=>i.id === to);
-            console.log(this.$store.state.messageStory,toChat, 'this.messageStory');
+            console.log(this.$store.state.messageStory, toChat, 'this.messageStory');
 
             if(this.$store.state.messageStory.length === 0){
                 console.log('begin search messages');
-
+                console.log(toChat);
                 this.$store.dispatch('getData', {
                     collection: 'chatHistory',
                     target: 'messageStory',

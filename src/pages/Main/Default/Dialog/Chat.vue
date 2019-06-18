@@ -16,12 +16,13 @@
                     </v-avatar>
                     <v-toolbar-title>
                         <span>
-                            <span v-if="currentChatInfo.name">{{ currentChatInfo.name }}</span>
+                            <span v-if="currentChatInfo.name && currentChatInfo.class === 'chat'">{{ opponent.name }}</span>
+                            <span v-else-if="currentChatInfo.class === 'dialog'">{{ currentChatInfo.name }}</span>
                         </span>
 
                         <span class="caption font-weight-light grey--text">
                             <span v-if="currentChatInfo.members.length === 2">
-                                was online: {{opponent.lastVisit}}
+                                был онлайн: {{opponent.lastVisit}}
                             </span>
 
                         </span>
@@ -33,19 +34,19 @@
                 </v-toolbar>
             </div>
             <div class="chat-content">
-                <div class="chat-content-messages">
+                <div class="chat-content-messages" v-if="history.length !== 0">
                     <div class="chat-content-messages-item"
                          :class="{'chat-content-messages-item_my-message': mess.ownerId === myInfo.id}"
                          v-for="(mess, index) in history"
                     >
-                        <img
-                                :src="findInfo(mess.ownerId, 'avatar')"
-                                class="chat-content-messages-item__avatar"
-                                v-if="findInfo(mess.ownerId, 'avatar') !== null && findInfo(mess.ownerId, 'avatar') !== ''">
+                        <!--<img-->
+                                <!--:src="findInfo(mess.ownerId, 'avatar')"-->
+                                <!--class="chat-content-messages-item__avatar"-->
+                                <!--v-if="findInfo(mess.ownerId, 'avatar') !== null && findInfo(mess.ownerId, 'avatar') !== ''">-->
                         <img
                                 src="@/assets/default-avatar.png"
                                 class="chat-content-messages-item__avatar"
-                                v-else>
+                               >
                         <div class="chat-content-messages-item-content">
 
                             <div class="chat-content-messages-item-content__text">{{mess.message}}</div>
@@ -63,7 +64,7 @@
                                   box
                                   clear-icon="mdi-close-circle"
                                   clearable
-                                  label="Message"
+                                  placeholder="Введите сообщение"
                                   type="text"
                                   @click:append="sendMenuToggle"
                                   @click:clear="clearMessage"
@@ -73,7 +74,7 @@
                     ></v-text-field>
                     <span>
             <v-icon class="mx-3"
-                    v-if="message"
+                    v-if="message !== ''"
                     @click="sendMessage"
             >
                 mdi-send
@@ -161,7 +162,6 @@
                     }, 10)
                 }
                 this.added = false;
-
             },
             findInfo(id, field){
                 return this.currentChatInfo.membersInfo.find(i=> i.id === id)[`${field}`];
@@ -185,53 +185,20 @@
         },
         mounted(){
             console.log(+this.$route.params.dialog, '+this.$route.params.dialog');
+            console.log(this.currentChatInfo, 'this.currentChatInfo');
             let opponent = this.currentChatInfo.members.find(i=> i !== this.myInfo.id);
+            console.log(opponent, 'opponent');
             this.$store.dispatch('getData', {collection: 'usersData', target: 'opponent', filters: {field: "id", cond: "==", eq: opponent}})
                 .then((res)=>{
                     res.body.forEach(i=>{
                         this.$store.commit('saveGotData', {target: 'opponent', val: i});
                         console.log(this.$store.state.firebase.opponent, this.currentChatInfo, 'this.$store.firebase.state.opponent');
-                        !this.currentChatInfo['membersInfo']? this.currentChatInfo.membersInfo = []: false;
+                        !this.currentChatInfo['membersInfo'] ? this.currentChatInfo.membersInfo = [] : false;
                         this.currentChatInfo.membersInfo.push(this.myInfo);
                         this.currentChatInfo.membersInfo.push(this.$store.state.firebase.opponent);
                     });
                 });
-            this.db.onSnapshot(doc => {
-                let source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-                let data = doc.data();
-                let el = data.history[data.history.length - 1];
-                let preLastEl = this.currentChatInfo.chatStory.history[data.history.length - 1];
-                console.log(el, 'is it ot me?');
-                console.log(source, 'source');
-
-                if(source === "Server"){
-                    console.log(el, preLastEl, 'el, preLastEl');
-                    this.history = el;
-                    console.log(this.currentChatInfo.chatStory.history, 'this.currentChatInfo.chatStory.history');
-                    setTimeout(function(){
-                        let a = document.querySelector('.chat-content-messages');
-                        a.scrollTo({
-                            top: a.scrollHeight,
-                            behavior: "smooth"
-                        })
-                    }, 50)
-                }
-            });
             this.currentChatInfo.chatStory.history.pop();
-            // this.db.onSnapshot(doc => {
-            //     let source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-            //     let data = doc.data();
-            //     let el = data.history[data.history.length - 1];
-            //     console.log(el, 'is it ot me?');
-            //     console.log(source, 'source');
-            //     if(source === "Server"){
-            //         let temp = this.history;
-            //         temp.push(el);
-            //         this.history = temp;
-            //         console.log(this.currentChatInfo.chatStory.history, 'this.currentChatInfo.chatStory.history');
-            //     }
-            // });
-            //this.currentChatInfo.chatStory.history.pop();
             setTimeout(function(){
                 let a = document.querySelector('.chat-content-messages');
                 a.scrollTo({

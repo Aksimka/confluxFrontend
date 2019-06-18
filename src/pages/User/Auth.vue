@@ -2,16 +2,16 @@
 .auth(@submit.prevent="validateBeforeSubmit")
     form.auth-form
         .input-wrapper
-            InputOne(name="login" placeholder="Login" pattern="email" type="text" @write="pushValue($event, 'email')")
+            InputOne(name="login" placeholder="Логин" pattern="email" type="text" @write="pushValue($event, 'email')")
         .input-wrapper
-            InputOne(name="password" placeholder="Password" pattern="alpha_num|min:5|max:20" inputType="password" @write="pushValue($event, 'password')")
+            InputOne(name="password" placeholder="Пароль" pattern="alpha_num|min:5|max:20" inputType="password" @write="pushValue($event, 'password')")
         .input-wrapper
-            CheckboxOne(name="keep" text="Keep me logged in")
+            CheckboxOne(name="keep" text="Запомнить пароль")
         .input-wrapper
             ButtonDefault(type="input" :text="btnText" :primary="!isWrong" :danger="isWrong")
     .auth__error-message {{errMess}}
     .auth-forgot-password
-        a.auth-forgot-password__btn(href="#") Forgot password?
+        a.auth-forgot-password__btn(href="#") Забыли пароль?
 
 
 </template>
@@ -30,7 +30,7 @@ export default {
             errMess: null,
             loginError: '',
             isWrong: false,
-            btnText: 'LogIn',
+            btnText: 'Войти',
             conformError: null
         }
     },
@@ -53,7 +53,7 @@ export default {
                         })
                         .catch(()=> {
                             this.isWrong = true;
-                            this.btnText = 'Try again';
+                            this.btnText = 'Попробуйте снова';
                             console.log(this.errors)
                         });
                 }

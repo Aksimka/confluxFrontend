@@ -15,6 +15,7 @@ export default {
                 let ref = firebase.firestore().collection(`${collection}`);
                 let query = ref;
                 if(val.limit) query = ref.limit(val.limit);
+                console.log(val, 'val');
                 if(val.filters) query = query.where(`${val.filters.field}`, `${val.filters.cond}`, val.filters.eq);
                 console.log(query,'query');
                 query.get().then(res=>{
@@ -22,10 +23,12 @@ export default {
                         collection: null,
                         body: []
                     };
+                    console.log(res, 'res');
                     data.collection = res.docs[0].id;
                     res.forEach(i=> {
                         data.body.push(i.data());
                     });
+                    console.log(data, 'data');
                     resolve(data);
                 });
             })
@@ -36,7 +39,7 @@ export default {
                 let value = val.val;
 
                 let ref = firebase.firestore().collection(`${collection}`);
-
+                console.log(collection, value, 'cv');
                 ref.add(value).then((response)=>{
                     console.log(response, 'response');
                     resolve(response)
@@ -63,13 +66,9 @@ export default {
                 let value = val.val;
                 let reference = val.ref;
                 let field = val.field;
-                console.log(val, 'valvalvalvalvlavla');
-
                 let ref = firebase.firestore().collection(`${collection}`).doc(reference);
                 let toUpdate = {timestamp: firebase.firestore.FieldValue.serverTimestamp()};
                 toUpdate[field] = firebase.firestore.FieldValue.arrayUnion(value);
-                console.log(toUpdate, 'toUpdatetoUpdatetoUpdatetoUpdate');
-
                 ref.update(toUpdate);
                 resolve(ref);
             })

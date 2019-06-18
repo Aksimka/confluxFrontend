@@ -1,17 +1,16 @@
 <template lang="pug">
 form.registration(@submit.prevent="validateBeforeSubmit")
     .input-wrapper
-        InputOne(name="username" placeholder="Username" pattern="alpha_num|min:5|max:20|required" type="text" @write="pushValue($event, 'login')")
+        InputOne(name="username" placeholder="Логин" pattern="alpha_num|min:5|max:20|required" type="text" @write="pushValue($event, 'login')")
     .input-wrapper
         InputOne(name="email" placeholder="Email" pattern="email|required" type="text" @write="pushValue($event, 'email')")
     .input-wrapper
-        InputOne(name="password" placeholder="Password" pattern="alpha_num|min:5|max:20|required" inputType="password" @write="pushValue($event, 'password')")
-    .input-wrapper(:class="{'warning': conformError}")
-        CheckboxOne(name="agree" text="I agree to terms and conditions" @changeCheckBox="pushValue($event, 'conform')")
+        InputOne(name="password" placeholder="Пароль" pattern="alpha_num|min:5|max:20|required" inputType="password" @write="pushValue($event, 'password')")
+
 
     .input-wrapper
-        ButtonDefault(type="submit" text="REGISTER" :primary="true")
-        .message {{errMess}}
+        ButtonDefault(type="submit" :text="btnText" :primary="!isWrong" :danger="isWrong" :success="registrated")
+    .message {{errMess}}
 </template>
 
 <script>
@@ -29,7 +28,10 @@ form.registration(@submit.prevent="validateBeforeSubmit")
                 password: '',
                 conform: false,
                 conformError: false,
-                errMess: null
+                errMess: null,
+                isWrong: false,
+                btnText: 'Зарегистрироваться',
+                registrated: false,
             }
         },
         methods: {
@@ -44,11 +46,14 @@ form.registration(@submit.prevent="validateBeforeSubmit")
                         this.$store.dispatch('registerUser', user)
                             .then(()=>{
                                 console.log('registrated');
-                                this.errMess = null;
+                                this.registrated = true;
+                                this.btnText = 'Успешно';
                             })
                             .catch(()=> {
-                                this.errMess = 'User already exists.';
-                                console.log(this.errors)
+                                this.errMess = 'Пользователь с данным email уже зарегестрирован.';
+                                console.log(this.errors);
+                                this.isWrong = true;
+                                this.btnText = 'Попробуйте снова';
                             });
                     }
                     if(this.conform === true) {
@@ -97,6 +102,8 @@ form.registration(@submit.prevent="validateBeforeSubmit")
     align-items: center
 .message
     color: #ff8079
+    text-align: center
+    margin-top: 15px
 
 .warning
     animation: warning .5s

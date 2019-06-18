@@ -1,5 +1,9 @@
 <template>
+<div class="default">
     <router-view></router-view>
+</div>
+
+
 </template>
 
 <script>
@@ -11,6 +15,9 @@ export default {
 </script>
 
 <style lang="sass">
+.default
+    background: url('/images/backgrounds/white-scratch-lines.png')
+    height: 100vh
 .h100
     height: 100%
 .chat-wrapper

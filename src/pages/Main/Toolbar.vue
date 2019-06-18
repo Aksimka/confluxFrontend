@@ -3,7 +3,7 @@
     <v-toolbar-side-icon @click="changeDrawerState"></v-toolbar-side-icon>
     <v-toolbar-title class="white--text">Conflux</v-toolbar-title>
     <v-spacer></v-spacer>
-    <div class="greeting pr-4 hidden-xs-only" >Hi, {{myInfo.name}}!</div>
+    <div class="greeting pr-4 hidden-xs-only" >Привет, {{myInfo.name}}!</div>
     <v-badge overlap bottom class="cup">
         <span slot="badge">3</span>
         <v-avatar color="teal">

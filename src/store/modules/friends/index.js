@@ -41,7 +41,30 @@ export default {
                         resolve(res);
                     })
             });
-
+        },
+        createDialog({commit, dispatch}, {value}){
+            let dialogId = value.id;
+            return new Promise(function (resolve, reject) {
+                dispatch('addData', {collection: 'dialogs', val: value})
+                    .then(res=>{
+                        value.members.forEach(i=> {
+                            dispatch('getData', {collection: 'usersData', filters: {field: 'id', cond: '==', eq: i}})
+                                .then(res=> {
+                                    console.log(value, dialogId, 'to update data');
+                                    dispatch('updateArray', {collection: 'usersData', val: dialogId, ref: res.collection, field: 'dialogs'});
+                                })
+                        });
+                        return value;
+                    })
+                    .then((_value)=>{
+                        console.log(_value, 'to create history');
+                        value = {
+                            id: _value.historyId,
+                            history: []
+                        };
+                        dispatch('addData', {collection: 'chatHistory', val: value})
+                    });
+            });
         }
     },
     mutations: {

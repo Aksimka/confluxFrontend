@@ -11,6 +11,7 @@ import dialog from './../pages/Main/Default/Dialog'
 import chat from './../pages/Main/Default/Dialog/Chat'
 import profile from './../pages/Main/Default/Profile'
 import friends from './../pages/Main/Default/Friends'
+import createDialog from './../pages/Main/Default/CreateDialog'
 import logout from './../pages/Main/Default/LogOut';
 
 
@@ -58,6 +59,10 @@ export default new Router({
                         {
                             path: 'friends',
                             component: friends
+                        },
+                        {
+                            path: 'createDialog',
+                            component: createDialog
                         }
                     ]
                 },
