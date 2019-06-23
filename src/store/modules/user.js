@@ -23,10 +23,8 @@ export default {
             commit('toggleLoading');
             try{
                 const user = await firebase.auth().createUserWithEmailAndPassword(email, password);
-                const userData = new UserData(new Date().getTime(), name, email, password, new Date().toISOString(), '', [], []);
-                // const newUserData = await firebase.database().ref('usersData').push();
-                // newUserData.set(userData);
-                // console.log(userData, 'this is user');
+                const userData = new UserData(new Date().toLocaleString(), name, email, password, new Date().toISOString(), '', [], []);
+
                 firebase.firestore().collection("usersData").add({
                     id: userData.id,
                     name: userData.name,
@@ -49,7 +47,7 @@ export default {
         async loginUser({commit, state, rootState}, {email, password}) {
             commit('clearError');
             commit('toggleLoading');
-            //console.log(rootState, rootMutations, 'state.myInfo');
+
             try{
                 const userLogin = await firebase.auth().signInWithEmailAndPassword(email, password);
                 let userData = firebase.firestore().collection('usersData').where('mail', '==', email);
@@ -69,9 +67,10 @@ export default {
                 throw error;
             }
         },
-        loggedUser({state, commit, getters}, payload){
+        async loggedUser({state, commit, getters}, payload){
             commit('setUser', new User(payload.uid));
             console.log(payload.uid, 'Check 2');
+            return payload.uid;
         },
         logoutUser({commit}){
             firebase.auth().signOut();

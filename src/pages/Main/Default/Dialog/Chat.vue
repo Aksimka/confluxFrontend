@@ -21,16 +21,44 @@
                         </span>
 
                         <span class="caption font-weight-light grey--text">
-                            <span v-if="currentChatInfo.members.length === 2">
-                                был онлайн: {{opponent.lastVisit}}
-                            </span>
-
+                            <div v-if="currentChatInfo.members.length === 2">
+                                <span v-if="opponent.lastVisit !== null">был онлайн: {{opponent.lastVisit}}</span>
+                                <span v-else>Online</span>
+                            </div>
                         </span>
                     </v-toolbar-title>
 
                     <v-spacer></v-spacer>
 
-                    <v-toolbar-side-icon></v-toolbar-side-icon>
+                    <!--<v-menu-->
+                            <!--bottom-->
+                            <!--origin="center center"-->
+                            <!--transition="slide-y-transition"-->
+                    <!--&gt;-->
+                        <!--<template v-slot:activator="{ on }">-->
+                            <!--<v-btn-->
+                                    <!--icon-->
+                                    <!--v-on="on"-->
+                            <!--&gt;-->
+                                <!--<v-icon>live_help</v-icon>-->
+                            <!--</v-btn>-->
+                        <!--</template>-->
+
+                        <!--<v-list>-->
+                            <!--<v-list-tile @click="">-->
+                                <!--<v-list-tile-title><v-icon left>reply</v-icon>Информация о диалоге</v-list-tile-title>-->
+                            <!--</v-list-tile>-->
+                            <!--<v-list-tile @click="" color="red">-->
+                                <!--<v-list-tile-title><v-icon left color="red">reply</v-icon> Покинуть диалог</v-list-tile-title>-->
+                            <!--</v-list-tile>-->
+                        <!--</v-list>-->
+                    <!--</v-menu>-->
+                    <v-btn
+                            icon
+                            @click="dialogInfo = !dialogInfo"
+                    >
+                        <v-icon>live_help</v-icon>
+                    </v-btn>
                 </v-toolbar>
             </div>
             <div class="chat-content">
@@ -118,7 +146,8 @@
                 pack: packData,
                 emojiMenu: false,
                 dbReference: {},
-                added: false
+                added: false,
+                dialogInfo: false
             }
         },
         components: {VEmojiPicker},
@@ -127,7 +156,9 @@
                 return document.querySelector('.send-message input');
             },
             opponent(){
-                return this.$store.state.firebase.opponent;
+                if(this.$store.state.firebase.opponent.length === 1){
+                    return this.$store.state.firebase.opponent[0];
+                }else {return this.$store.state.firebase.opponent;}
             },
             db(){
                 return firebase.firestore().collection('chatHistory').doc(`${this.currentChatInfo.reference}`);
@@ -147,7 +178,7 @@
                 if(this.message !== ''){
                     this.$store.dispatch('createChatMessage', {
                         collection: 'chatHistory',
-                        val: {date: new Date().toISOString(), message: this.message, ownerId: this.myInfo.id},
+                        val: {date: new Date().toLocaleString(), message: this.message, ownerId: this.myInfo.id},
                         ref: this.currentChatInfo.reference,
                         field: 'history'
                     });
@@ -186,18 +217,21 @@
         mounted(){
             console.log(+this.$route.params.dialog, '+this.$route.params.dialog');
             console.log(this.currentChatInfo, 'this.currentChatInfo');
-            let opponent = this.currentChatInfo.members.find(i=> i !== this.myInfo.id);
+            let opponent = this.currentChatInfo.members.filter(i=> i !== this.myInfo.id);
             console.log(opponent, 'opponent');
-            this.$store.dispatch('getData', {collection: 'usersData', target: 'opponent', filters: {field: "id", cond: "==", eq: opponent}})
-                .then((res)=>{
-                    res.body.forEach(i=>{
-                        this.$store.commit('saveGotData', {target: 'opponent', val: i});
-                        console.log(this.$store.state.firebase.opponent, this.currentChatInfo, 'this.$store.firebase.state.opponent');
-                        !this.currentChatInfo['membersInfo'] ? this.currentChatInfo.membersInfo = [] : false;
-                        this.currentChatInfo.membersInfo.push(this.myInfo);
-                        this.currentChatInfo.membersInfo.push(this.$store.state.firebase.opponent);
+            opponent.forEach(i=> {
+                this.$store.dispatch('getData', {collection: 'usersData', filters: {field: "id", cond: "==", eq: i}})
+                    .then((res)=>{
+                        res.body.forEach(j=>{
+                            console.log(j, 'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
+                            this.$store.commit('pushToData', {target: 'opponent', val: j});
+                            console.log(this.$store.state.firebase.opponent, this.currentChatInfo, 'this.$store.firebase.state.opponent');
+                            !this.currentChatInfo['membersInfo'] ? this.currentChatInfo.membersInfo = [] : false;
+                            this.currentChatInfo.membersInfo.push(this.myInfo);
+                            this.currentChatInfo.membersInfo.push(this.$store.state.firebase.opponent);
+                        });
                     });
-                });
+            });
 
             this.db.onSnapshot(doc => {
                 let source = doc.metadata.hasPendingWrites ? "Local" : "Server";
@@ -215,7 +249,6 @@
                         let a = document.querySelector('.chat-content-messages');
                         a.scrollTo({
                             top: a.scrollHeight,
-                            behavior: "smooth"
                         })
                     }, 50)
                 }

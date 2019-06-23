@@ -56,7 +56,7 @@ export default {
             this.$router.push(`/user/${this.$store.getters.getUser.id}/dialog`);
             console.log(`go to ${to}`);
             this.$store.commit('clearCurrentChat');
-            Vue.set(this.$store.state.firebase, 'opponent', {});
+            Vue.set(this.$store.state.firebase, 'opponent', []);
             let toChat = this.dialogList.find(i=>i.id === to);
             console.log(this.$store.state.messageStory, toChat, 'this.messageStory');
 

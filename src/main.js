@@ -13,6 +13,17 @@ import 'firebase/firestore'
 
 Vue.config.productionTip = false;
 Vue.use(VeeValidate);
+Vue.mixin({
+    methods: {
+        forTime(val) {
+            if (val && val !== null) {
+                var without = val.split('T')[0];
+                var partDate = without.split('-');
+                return partDate[2] + '.' + partDate[1] + '.' + partDate[0];
+            }
+        },
+    }
+});
 
 new Vue({
     router,
@@ -41,16 +52,23 @@ new Vue({
         firebase.auth().onAuthStateChanged(user=> {
             console.log(user, 'user');
             let userData = firebase.firestore().collection('usersData').where('mail', '==', user.email);
-            userData.get().then(data=> {
-                data.forEach(i=>{
-                    this.$store.commit('setMyInfo', i.data(), {root: true});
-                    Vue.set(this.$store.state.myInfo, 'reference', i.id);
+            userData.get()
+                .then(data=> {
+                    data.forEach(i=>{
+                        this.$store.commit('setMyInfo', i.data(), {root: true});
+                        Vue.set(this.$store.state.myInfo, 'reference', i.id);
+                    });
+                    this.$store.commit('userLoaded');
+                    this.$store.dispatch('changeFieldInDoc', {collection: 'usersData', ref: this.$store.state.myInfo.reference, val: {lastVisit: null} })
+
                 });
-                this.$store.commit('userLoaded');
-            });
+
             if(user){
                 console.log(this.$store.state.user.user, 'before relogging');
-                this.$store.dispatch('loggedUser', user);
+                this.$store.dispatch('loggedUser', user).then((ref)=> {
+                    console.log(this.$store.state.myInfo, 'document reference');
+                    //this.$store.dispatch('changeFieldInDoc', {collection: 'usersData', ref: data[0].id, val: {lastVisit: null} })
+                });
                 console.log('user is logged again!');
             }
         })

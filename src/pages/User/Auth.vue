@@ -2,7 +2,7 @@
 .auth(@submit.prevent="validateBeforeSubmit")
     form.auth-form
         .input-wrapper
-            InputOne(name="login" placeholder="Логин" pattern="email" type="text" @write="pushValue($event, 'email')")
+            InputOne(name="login" placeholder="Email" pattern="email" type="text" @write="pushValue($event, 'email')")
         .input-wrapper
             InputOne(name="password" placeholder="Пароль" pattern="alpha_num|min:5|max:20" inputType="password" @write="pushValue($event, 'password')")
         .input-wrapper
@@ -43,13 +43,13 @@ export default {
                         password: this.password,
                         name: this.name
                     };
-                    this.btnText = 'Loading...';
+                    this.btnText = 'Загрузка...';
                     this.$store.dispatch('loginUser', user)
                         .then(()=>{
                             console.log('logged in');
                             this.errMess = null;
                             console.log(this.$store.getters.getUser);
-                            this.$router.push(`/user/${this.$store.getters.getUser.id}`)
+                            this.$router.push(`/user/${this.$store.getters.getUser.id}/dialog`)
                         })
                         .catch(()=> {
                             this.isWrong = true;

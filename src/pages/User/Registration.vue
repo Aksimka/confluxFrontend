@@ -38,6 +38,7 @@ form.registration(@submit.prevent="validateBeforeSubmit")
             validateBeforeSubmit () {
                 this.$validator.validateAll().then((result) => {
                     if (result) {
+                        this.btnText = 'Загрузка...';
                         const user = {
                             email: this.email,
                             password: this.password,
@@ -47,11 +48,14 @@ form.registration(@submit.prevent="validateBeforeSubmit")
                             .then(()=>{
                                 console.log('registrated');
                                 this.registrated = true;
+                                this.isWrong = false;
                                 this.btnText = 'Успешно';
+                                this.errMess = null;
                             })
                             .catch(()=> {
                                 this.errMess = 'Пользователь с данным email уже зарегестрирован.';
                                 console.log(this.errors);
+                                this.registrated = false;
                                 this.isWrong = true;
                                 this.btnText = 'Попробуйте снова';
                             });

@@ -59,6 +59,12 @@ export default {
     },
     methods: {
         logOut(){
+            this.$store.dispatch('changeFieldInDoc',
+                {
+                    collection: 'usersData',
+                    ref: this.$store.state.myInfo.reference,
+                    val: {lastVisit: new Date().toLocaleString()}
+                });
             this.$store.dispatch('logoutUser');
             this.$router.push('/auth');
         }

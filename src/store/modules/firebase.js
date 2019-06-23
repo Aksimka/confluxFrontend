@@ -70,6 +70,7 @@ export default {
                 let toUpdate = {timestamp: firebase.firestore.FieldValue.serverTimestamp()};
                 toUpdate[field] = firebase.firestore.FieldValue.arrayUnion(value);
                 ref.update(toUpdate);
+                console.log(``)
                 resolve(ref);
             })
         },
@@ -78,7 +79,7 @@ export default {
                 let collection = val.collection;
                 let value = val.val;
                 let reference = val.ref;
-                console.log(val, 'valvalvalvalvlavla');
+                console.log(`field`);
                 let ref = firebase.firestore().collection(`${collection}`).doc(reference);
 
                 ref.update(value);
@@ -90,6 +91,9 @@ export default {
         saveGotData(state, val){
             console.log(`state[${val.target}] = ${val.val}`);
             state[`${val.target}`] = val.val;
+        },
+        pushToData(state, val){
+            state[val.target].push(val.val);
         }
     }
 }
