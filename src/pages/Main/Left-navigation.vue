@@ -1,5 +1,5 @@
 <template>
-<v-navigation-drawer app v-model="$store.state.drawer">
+<v-navigation-drawer app v-model="$store.state.drawer" style="z-index: 9999;">
     <v-img :aspect-ratio="16/9" :src="avatar" gradient="to top right, rgba(0,0,0,0.5), rgba(0,0,0,0.5)">
         <v-layout pa-2 column fill-height class="white--text">
             <v-spacer></v-spacer>

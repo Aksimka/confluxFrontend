@@ -63,6 +63,7 @@ export default {
                             history: []
                         };
                         dispatch('addData', {collection: 'chatHistory', val: value})
+                        resolve(value);
                     });
             });
         }

@@ -23,7 +23,6 @@ export default {
 .chat-wrapper
     background: #FAFAFA
 .dialog-list
-    overflow-y: scroll
     height: 85vh
 
 </style>

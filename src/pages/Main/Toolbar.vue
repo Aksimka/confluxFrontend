@@ -1,5 +1,5 @@
 <template>
-<v-toolbar app dark color="amber darken-2 pr-4">
+<v-toolbar app dark color="amber darken-2 pr-4" >
     <v-toolbar-side-icon @click="changeDrawerState"></v-toolbar-side-icon>
     <v-toolbar-title class="white--text">Conflux</v-toolbar-title>
     <v-spacer></v-spacer>

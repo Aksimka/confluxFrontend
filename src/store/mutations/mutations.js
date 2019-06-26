@@ -13,11 +13,14 @@ export default {
     },
     setDialogs(state, val){
         console.log('Dialogs are gotten');
-        state.dialogList = val;
+        Vue.set(state, 'dialogList', val);
     },
     setCurrentChat(state, val){
         console.log('Current chat is gotten');
         Vue.set(state, 'currentChat', val);
+    },
+    setInDialog(state, val){
+        state.inDialog = val;
     },
     clearCurrentChat(state){
         let clearedChat = {
@@ -42,6 +45,9 @@ export default {
         };
         Vue.set(state, 'currentChat', clearedChat);
         console.log('currentChat clear');
+    },
+    removeCurrnetChat(state){
+        state.currentChat = [];
     },
     setMessageStory(state, val){
         console.log('Message story is gotten');

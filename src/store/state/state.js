@@ -1,6 +1,7 @@
 
 export default {
     drawer: false,
+    inDialog: false,
     dialogList: [
         {
             historyId: null,

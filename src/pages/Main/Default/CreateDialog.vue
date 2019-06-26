@@ -16,7 +16,7 @@
                                 >
                                 </v-autocomplete>
                             </v-flex>
-                            <v-flex md2 class="align-center">
+                            <v-flex md2 xs12 class="align-center">
                                 <v-btn
                                         color="amber darken-2"
                                         class="white--text"
@@ -110,12 +110,17 @@
                                 <v-spacer></v-spacer>
                                 <v-flex md3>
                                     <v-btn
-                                            large
+                                            large block
                                             color="amber darken-2"
                                             class="white--text"
                                             @click="createDialog(chatName, friendSearch)"
                                     >
-                                        Создать диалог
+                                        <v-progress-circular
+                                                indeterminate
+                                                color="amber lighten-2"
+                                                v-if="createLoading"
+                                        ></v-progress-circular>
+                                        <span v-else>Создать диалог</span>
                                     </v-btn>
                                 </v-flex>
                                 <v-spacer></v-spacer>
@@ -145,11 +150,13 @@
                 friendSearch: [],
                 createModal: false,
                 test: false,
-                chatName: ''
+                chatName: '',
+                createLoading: false
             }
         },
         methods: {
             createDialog(name, _members){
+                this.createLoading = true;
                 let members = _members;
                 members.push(this.myInfo.id);
                 let historyId = new Date().getTime() + 5;
@@ -170,6 +177,28 @@
                     ownerId: this.myInfo.id
                 };
                 this.$store.dispatch('createDialog', {value: dialog})
+                    .then(()=>{
+                        this.$store.commit('setDialogs', []);
+                        this.createLoading = false;
+                        this.myInfo.dialogs.push(dialog.id);
+                        if(this.dialogList.length === 0){
+                            this.myInfo.dialogs.forEach(i=> {
+                                this.$store.dispatch('getData', {
+                                    collection: 'dialogs',
+                                    target: 'dialogList',
+                                    filters: {field: "id", cond: "==", eq: i},
+                                    root: true
+                                })
+                                    .then(res => {
+                                        res.body.forEach(i=>{
+                                            this.dialogList.push(i)
+                                        });
+                                    })
+                            });
+                        }
+
+                        this.$router.push(`/user/${this.userId.id}/dialog`)
+                    })
             },
             addToCreateList(id){
                 let index = this.friendSearch.findIndex(i=>i === id);

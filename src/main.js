@@ -5,6 +5,9 @@ import router from './router/router'
 import store from './store/store'
 import VeeValidate from 'vee-validate'
 
+import PerfectScrollbar from "vue2-perfect-scrollbar";
+import "vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css";
+
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
@@ -13,15 +16,16 @@ import 'firebase/firestore'
 
 Vue.config.productionTip = false;
 Vue.use(VeeValidate);
+Vue.use(PerfectScrollbar);
 Vue.mixin({
     methods: {
-        forTime(val) {
-            if (val && val !== null) {
-                var without = val.split('T')[0];
-                var partDate = without.split('-');
-                return partDate[2] + '.' + partDate[1] + '.' + partDate[0];
-            }
-        },
+        // forTime(val) {
+        //     if (val && val !== null) {
+        //         var without = val.split('T')[0];
+        //         var partDate = without.split('-');
+        //         return partDate[2] + '.' + partDate[1] + '.' + partDate[0];
+        //     }
+        // },
     }
 });
 
